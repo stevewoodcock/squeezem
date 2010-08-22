@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "squeezem"
-  s.version     = 0.1
+  s.version     = "0.1.1"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Steve Woodcock"]
   s.email       = ["steve.woodcock@gmail.com"]
@@ -10,7 +10,6 @@ Gem::Specification.new do |s|
 compress them, but is designed mainly to keep an eye on a tree of
 images to make sure they stay in good shape."
  
-  s.required_rubygems_version = ">= 1.3.6"
   s.rubyforge_project         = "squeezem"
  
   s.files        = Dir.glob("{bin,lib}/**/*") + %w(LICENSE README)
