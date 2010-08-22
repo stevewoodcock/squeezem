@@ -4,21 +4,42 @@ images to make sure they stay in good shape.
 
 Install
 
+  install pngcrush
   sudo gem install squeezem
 
 Usage
 
-List files which could benefit from squeezing, suitable for running from cron.
+List files which could benefit from squeezing, suitable for running
+from cron:
 
-  squeezem .
+  squeezem path/to/images ...
 
-Squeeze 'em
+Example output:
 
-  squeezem --squeezem
+  test/apple.png
+  test/banana.png
+  test/pear.png
+  ...
+  11 files out of 12 could save 192972 out of 229834 (83.96)%. 17 files ignored.
 
-Force previously seen files to be reevaluated:
+Results of processing previously seen files are cached, so only new or
+changed files are processed. The cache lives in ~/.squeezem-cache, and
+is keyed by canonical filename, so you can pass different paths to the
+same file and it will only be reprocessed when it changes.
 
-  squeezem --ignore-cache
+eg. a.png will only be processed once:
+
+  squeezem /web/images/a.png
+  cd /web/images
+  squeezem a.png
+
+Squeeze 'em. Runs pngcrush and compresses files in-place:
+
+  squeezem --squeezem .
+
+Forces previously seen files to be reprocessed:
+
+  squeezem --ignore-cache .
 
 Related
 
