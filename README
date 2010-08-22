@@ -2,6 +2,10 @@ List pngs which are bigger than they need to be. Can optionally
 compress them, but is designed mainly to keep an eye on a tree of
 images to make sure they stay in good shape.
 
+Install
+
+  sudo gem install squeezem
+
 Usage
 
 List files which could benefit from squeezing, suitable for running from cron.
