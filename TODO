@@ -1,0 +1,3 @@
+pass list of files on stdin
+--cache-file path to cache file instead of ~/.squeezem-cache
+jpg/gif support
