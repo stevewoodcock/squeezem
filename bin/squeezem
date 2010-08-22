@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+require 'squeezem'
+require 'find'
+require 'optparse'
+
+def parse_options
+  options = OpenStruct.new
+  options.squeezem = false
+  options.ignorecache = false
+  
+  opts = OptionParser.new do |opts|
+    opts.banner = <<BANNER
+List pngs which are bigger than they need to be, and optionally compress them.
+
+Usage:
+    squeezem .
+
+Options:
+BANNER
+    opts.on("-s", "--squeezem", "Squeeze files") { options.squeezem = true }
+    opts.on("-i", "--ignore-cache", "Ignore file cache") { options.ignorecache = true }
+    opts.on_tail("-h", "--help", "Show this message") { puts opts; exit }
+  end
+  begin
+    opts.parse!
+  rescue
+    puts opts
+    exit 1
+  end
+  return options
+end
+
+options = parse_options
+squeezem = Squeezem.new(options)
+ARGV.each do |file_or_dir|
+  Find.find(file_or_dir) do |path|
+    squeezem.squeeze(path) if File.file?(path)
+  end
+end
+squeezem.summary
