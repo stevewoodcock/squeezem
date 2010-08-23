@@ -1,4 +1,3 @@
-Dir.mktmpdir replacement for 1.8.6
 pass list of files on stdin
 --cache-file path to cache file instead of ~/.squeezem-cache
 jpg/gif support

@@ -1,3 +1,6 @@
+0.1.2  2010-08-23
+  Fix to work in 1.8.6-p369 and below
+
 0.1.1  2010-08-22
   Removed rubygems version dependency
 

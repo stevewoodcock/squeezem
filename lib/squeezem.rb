@@ -7,27 +7,37 @@ require 'fileutils'
 class Squeezem
   def initialize(options)
     @options = options
-    @output_path = "/tmp/x"
     @total_bytes = 0
     @saved_bytes = 0
     @files_seen = 0
     @files_ignored = 0
     @files_with_saving = 0
-    output_dir = Dir.mktmpdir
+    output_dir = make_output_dir
     at_exit do
       write_cache
       FileUtils.rm_rf(output_dir)
     end
     @output_path = File.join(output_dir, 'x')
     @files = read_cache
-    @interrupted = false
     trap("INT") {
-      @interrupted = true
+      summary
+      exit
     }
   end
 
+  def make_output_dir
+    begin
+      Dir.mktmpdir
+    rescue NoMethodError
+      # Lame fallback for 1.8.6-p369 and below
+      dir = Dir.tmpdir + "/squeezem-#{$$}"
+      Dir.mkdir(dir)
+      FileUtils.chmod(0700, dir)
+      return dir
+    end
+  end
+
   def squeeze(path)
-    handle_interruption
     return unless valid_file?(path)
     @files_seen += 1
     @path = path
@@ -48,19 +58,16 @@ class Squeezem
     end
     if File.exist?(@output_path)
       new_size = File.size(@output_path)
+      if new_size == 0
+        $stderr.puts "Empty output for #{path}"
+        return
+      end
       saving = @size - new_size
       record_saving(saving)
       @files[canonical_path] = OpenStruct.new(:size => @size, :saving => saving)
       keep_or_remove_output
     else
       $stderr.puts "Error processing #{path}:", output
-    end
-  end
-
-  def handle_interruption
-    if @interrupted
-      summary
-      exit
     end
   end
 
