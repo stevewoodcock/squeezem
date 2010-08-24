@@ -1,3 +1,7 @@
+0.1.3  2010-08-24
+  Added jpg support
+  Fix cache in squeezem mode to store new size and saving
+
 0.1.2  2010-08-23
   Fix to work in 1.8.6-p369 and below
 
