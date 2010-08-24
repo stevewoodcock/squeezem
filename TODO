@@ -1,3 +1,4 @@
 pass list of files on stdin
 --cache-file path to cache file instead of ~/.squeezem-cache
-jpg/gif support
+gif support
+fix bug running with -s - should mark savings as 0 in cache

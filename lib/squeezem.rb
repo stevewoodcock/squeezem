@@ -7,6 +7,7 @@ require 'fileutils'
 class Squeezem
   def initialize(options)
     @options = options
+    find_helpers
     @total_bytes = 0
     @saved_bytes = 0
     @files_seen = 0
@@ -25,6 +26,22 @@ class Squeezem
     }
   end
 
+  def find_helpers
+    @helpers = {}
+    @helpers[:png] = 1 if command_exists?("pngcrush")
+    @helpers[:jpg] = 1 if command_exists?("jpegtran")
+    if @helpers.size == 0
+      $stderr.puts "Can't find any helpers - please install at least one of pngcrush or jpegtran!"
+      exit 1
+    end
+  end
+
+  def command_exists?(command)
+    system("which #{command} >/dev/null 2>/dev/null")
+    return false if $?.exitstatus == 127
+    return true
+  end
+
   def make_output_dir
     begin
       Dir.mktmpdir
@@ -38,7 +55,11 @@ class Squeezem
   end
 
   def squeeze(path)
-    return unless valid_file?(path)
+    file_type = get_file_type(path)
+    unless valid_file_type?(file_type)
+      @files_ignored += 1
+      return
+    end
     @files_seen += 1
     @path = path
     @size = File.size(path)
@@ -52,10 +73,7 @@ class Squeezem
         end
       end
     end
-    output = ''
-    Open3.popen3('pngcrush', '-quiet', '-rem', 'alla', '-reduce', '-brute', path, @output_path) do |stdin, stdout, stderr|
-      output = stdout.read
-    end
+    output = process_file(path, file_type)
     if File.exist?(@output_path)
       new_size = File.size(@output_path)
       if new_size == 0
@@ -71,12 +89,35 @@ class Squeezem
     end
   end
 
-  def valid_file?(path)
-    if !(path =~ /\.(png)$/)
-      @files_ignored += 1
-      return false
+  def get_file_type(path)
+    extension = File.extname(path).sub('.', '')
+    if extension.empty?
+      return nil
+    else
+      return extension.to_sym
     end
-    return true
+  end
+
+  def valid_file_type?(type)
+    @helpers[type]
+  end
+
+  def process_file(path, file_type)
+    output = ''
+    case file_type
+    when :png
+      Open3.popen3('pngcrush', '-quiet', '-rem', 'alla', '-reduce', '-brute', path, @output_path) do |stdin, stdout, stderr|
+        output = stdout.read
+      end
+    when :jpg
+      File.open(@output_path, "w") do |out|
+        Open3.popen3('jpegtran', '-copy', 'none', '-optimize', '-perfect', path) do |stdin, stdout, stderr|
+          out.write(stdout.read)
+          output = stderr.read
+        end
+      end
+    end
+    return output
   end
 
   def keep_or_remove_output
