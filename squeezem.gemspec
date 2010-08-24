@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
   s.name        = "squeezem"
-  s.version     = "0.1.3"
+  s.version     = "0.1.4"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Steve Woodcock"]
   s.email       = ["steve.woodcock@gmail.com"]
   s.homepage    = "http://github.com/stevewoodcock/squeezem"
-  s.summary     = "List pngs which are bigger than they need to be, and optionally compress them"
-  s.description = "List pngs which are bigger than they need to be. Can optionally
+  s.summary     = "List pngs or jpgs which are bigger than they need to be, and optionally compress them"
+  s.description = "List pngs or jpgs which are bigger than they need to be. Can optionally
 compress them, but is designed mainly to keep an eye on a tree of
 images to make sure they stay in good shape."
  

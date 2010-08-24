@@ -1,6 +1,6 @@
-List pngs which are bigger than they need to be. Can optionally
-compress them, but is designed mainly to keep an eye on a tree of
-images to make sure they stay in good shape.
+List pngs or jpgs which are bigger than they need to be. Can
+optionally compress them, but is designed mainly to keep an eye on a
+tree of images to make sure they stay in good shape.
 
 Prerequisites
 
@@ -40,7 +40,7 @@ eg. a.png will only be processed once:
   cd /web/images
   squeezem a.png
 
-Squeeze 'em. Runs pngcrush and compresses files in-place:
+Squeeze 'em. Compresses files in-place:
 
   squeezem --squeezem .
 
