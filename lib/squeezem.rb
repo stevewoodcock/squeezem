@@ -82,8 +82,15 @@ class Squeezem
       end
       saving = @size - new_size
       record_saving(saving)
-      @files[canonical_path] = OpenStruct.new(:size => @size, :saving => saving)
       keep_or_remove_output
+      if @options.squeezem
+        cache_saving = 0
+        cache_size = new_size
+      else
+        cache_saving = saving
+        cache_size = @size
+      end
+      @files[canonical_path] = OpenStruct.new(:size => cache_size, :saving => cache_saving)
     else
       $stderr.puts "Error processing #{path}:", output
     end
