@@ -10,6 +10,10 @@ On Mac:
 
   sudo port install pngcrush jpeg
 
+On Ubuntu:
+
+  sudo apt-get install pngcrush libjpeg-progs
+
 Install
 
   sudo gem install squeezem
