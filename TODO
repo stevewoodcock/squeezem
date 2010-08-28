@@ -1,4 +1,3 @@
 pass list of files on stdin
 --cache-file path to cache file instead of ~/.squeezem-cache
 gif support
-Catch "Not a JPEG file: starts with 0x47 0x49" etc.

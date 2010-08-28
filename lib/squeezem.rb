@@ -77,7 +77,7 @@ class Squeezem
     if File.exist?(@output_path)
       new_size = File.size(@output_path)
       if new_size == 0
-        $stderr.puts "Empty output for #{path}"
+        report_error(path, output)
         return
       end
       saving = @size - new_size
@@ -92,8 +92,13 @@ class Squeezem
       end
       @files[canonical_path] = OpenStruct.new(:size => cache_size, :saving => cache_saving)
     else
-      $stderr.puts "Error processing #{path}:", output
+      report_error(path, output)
     end
+  end
+
+  def report_error(path, output)
+    $stderr.print "Error processing #{path}"
+    $stderr.puts ": #{output}" if output
   end
 
   def get_file_type(path)
