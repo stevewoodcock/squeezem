@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "squeezem"
-  s.version     = "0.1.4"
+  s.version     = "0.1.5"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Steve Woodcock"]
   s.email       = ["steve.woodcock@gmail.com"]
