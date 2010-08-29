@@ -8,6 +8,7 @@ def parse_options
   options = OpenStruct.new
   options.squeezem = false
   options.ignorecache = false
+  options.verbose = false
   
   opts = OptionParser.new do |opts|
     opts.banner = <<BANNER
@@ -20,6 +21,7 @@ Options:
 BANNER
     opts.on("-s", "--squeezem", "Squeeze files") { options.squeezem = true }
     opts.on("-i", "--ignore-cache", "Ignore file cache") { options.ignorecache = true }
+    opts.on("-v", "--verbose", "Verbose output") { options.verbose = true }
     opts.on_tail("-h", "--help", "Show this message") { puts opts; exit }
   end
   begin

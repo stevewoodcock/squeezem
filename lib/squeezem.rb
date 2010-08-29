@@ -55,19 +55,24 @@ class Squeezem
   end
 
   def squeeze(path)
+    log("Considering #{path}")
     file_type = get_file_type(path)
     unless valid_file_type?(file_type)
+      log("Ignoring, #{file_type} not a valid file type")
       @files_ignored += 1
       return
     end
     @files_seen += 1
     @path = path
     @size = File.size(path)
+    log("File size #{@size}")
     canonical_path = File.expand_path(path)
     unless @options.ignorecache
       cache = @files[canonical_path]
+      log("Read cache #{cache}")
       if cache && cache.size == @size
         unless @options.squeezem && cache.saving > 0
+          log("Skipping file, already processed")
           record_saving(cache.saving)
           return
         end
@@ -118,12 +123,17 @@ class Squeezem
     output = ''
     case file_type
     when :png
-      Open3.popen3('pngcrush', '-quiet', '-rem', 'alla', '-reduce', '-brute', path, @output_path) do |stdin, stdout, stderr|
+      cmd = ['pngcrush', '-quiet', '-rem', 'alla', '-reduce', '-brute', path, @output_path]
+      log("Calling #{cmd.join(' ')}")
+      Open3.popen3(*cmd) do |stdin, stdout, stderr|
         output = stdout.read
+        output += stderr.read
       end
     when :jpg
       File.open(@output_path, "w") do |out|
-        Open3.popen3('jpegtran', '-copy', 'none', '-optimize', '-perfect', path) do |stdin, stdout, stderr|
+        cmd = ['jpegtran', '-copy', 'none', '-optimize', '-perfect', path]
+        log("Calling #{cmd.join(' ')}")
+        Open3.popen3(*cmd) do |stdin, stdout, stderr|
           out.write(stdout.read)
           output = stderr.read
         end
@@ -176,5 +186,9 @@ class Squeezem
     File.open(cache_filename, "w") do |f|
       f.puts Marshal.dump(@files)
     end
+  end
+
+  def log(message)
+    puts message if @options.verbose
   end
 end
