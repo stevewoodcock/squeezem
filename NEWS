@@ -1,5 +1,6 @@
-0.1.4?
+0.1.4  2010-08-29
   Show error message if jpegtran fails
+  Added --verbose
 
 0.1.3  2010-08-24
   Added jpg support
