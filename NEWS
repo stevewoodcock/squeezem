@@ -1,3 +1,9 @@
+0.1.6  2013-09-04
+  Make pngcrush settings more conservative:
+  - Removed -reduce because it breaks transparent pngs.
+  - Removed -brute because it's very slow for the slight improvement it gives.
+  - Switched alla to allb to additionally preserve gamma chunk.
+
 0.1.5  2010-08-29
   Show error message if jpegtran fails
   Added --verbose
