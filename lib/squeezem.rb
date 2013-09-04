@@ -123,7 +123,7 @@ class Squeezem
     output = ''
     case file_type
     when :png
-      cmd = ['pngcrush', '-quiet', '-rem', 'alla', '-reduce', '-brute', path, @output_path]
+      cmd = ['pngcrush', '-quiet', '-rem', 'allb', path, @output_path]
       log("Calling #{cmd.join(' ')}")
       Open3.popen3(*cmd) do |stdin, stdout, stderr|
         output = stdout.read
